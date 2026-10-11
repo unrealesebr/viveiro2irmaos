@@ -1,0 +1,1598 @@
+/* ---------- Altone ----------
+   ATENCAO: os arquivos em assets/fonts/ sao a versao TRIAL da familia.
+   Licenca de avaliacao nao cobre site publicado -- antes de subir, troque
+   pelos arquivos da licenca comprada (de preferencia .woff2, que costuma
+   ficar 3 a 5x menor que o .ttf).
+
+   A trial traz dois pesos: regular e bold. A pagina usa quatro. Cada arquivo
+   cobre uma faixa para o navegador nao inventar pesos sinteticos, que saem
+   borrados:
+     regular -> 400 e 500
+     bold    -> 600 e 700
+
+   Sem os arquivos, a pilha cai na Montserrat sem quebrar. */
+@font-face{
+  font-family:'Altone';
+  src:url('../fonts/altonetrial-regular.ttf') format('truetype');
+  font-weight:400 500; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'Altone';
+  src:url('../fonts/altonetrial-bold.ttf') format('truetype');
+  font-weight:600 700; font-style:normal; font-display:swap;
+}
+
+/* ============================================================
+   VIVEIRO 2 IRMÃOS — Landing Page
+   Tipografia: Montserrat (títulos em caixa alta)
+   Degradê oficial: #1E281F → #374839
+   ============================================================ */
+
+/* ---------- 1. Tokens ---------- */
+:root{
+  --ink-800:#1E281F;          /* cor inicial do degradê oficial */
+  --ink-600:#374839;          /* cor final do degradê oficial */
+  --ink-500:#485C4B;
+
+  --bone:#F1F5F2;             /* texto claro sobre fundo escuro */
+
+  /* ----------------------------------------------------------------
+     PALETA DA REFERÊNCIA (referencia-page.jpg), amostrada do arquivo.
+     Os escuros da referência (#21231C, #162117, #253226) coincidem com
+     o #1E281F oficial — por isso ela se integra sem brigar com a marca.
+     ---------------------------------------------------------------- */
+
+  /* Superfícies claras — a referência é majoritariamente branca */
+  /* Fundos das dobras, amostrados da referencia-02. Sao tokens proprios:
+     --ink-800 continua sendo TINTA (texto), e usar a mesma variavel para
+     fundo de secao deixava o texto verde-medio quando o fundo mudava. */
+  --dobra-clara:#F6FDF6;      /* branco esverdeado */
+  --dobra-suave:#E2FAE4;      /* verde muito claro */
+  --dobra-verde:#7ED883;      /* verde claro chapado */
+  --dobra-escura:#25422B;     /* verde escuro */
+  --dobra-funda:#1C3025;      /* verde quase preto */
+  --surface:#F5F1EB;          /* cards, sobre as dobras claras — bege suave */
+  /* Os cards da dobra 6 sao MAIS ESCUROS que o fundo dela (#E2FAE4), nao
+     mais claros. O branco puro e neutro (R=G=B) e, contra um fundo com 23
+     pontos de verde, lia como frio e chapado. O problema nunca foi
+     contraste -- o branco dava 1,104 de separacao e este da 1,160, na
+     direcao oposta.
+     So vale sobre a dobra suave: sobre as dobras quase brancas ou sobre o
+     verde forte da dobra 4 ele nao se separa do fundo. */
+  --surface-card:#CDEBD2;
+  /* A borda dos cards dessa dobra: --line-light e mais clara que o proprio
+     card, entao nao desenhava aresta e o bloco derretia no fundo. Tinta a
+     14% e a aresta minima para o card existir sobre o verde claro. */
+  --line-card:rgba(30,40,31,.14);
+  --surface-2:var(--dobra-clara);
+  --mint:var(--dobra-verde);
+  --surface-3:#EDF6EE;        /* blocos secundarios sobre dobra clara */
+  --surface-variety:#E8F5EA;  /* cards de variedade — verde bem claro */
+  --line-2:#D7E4D9;           /* divisores e bordas em fundo claro */
+
+  /* Neutros — cada um na faixa de contraste em que funciona */
+  --gray-400:#A0A1A1;         /* texto secundário sobre fundo escuro */
+  --gray-500:#7F8181;         /* ícones e texto terciário sobre escuro */
+  --gray-600:#60615F;         /* corpo de texto sobre fundo claro */
+  --gray-700:#50514F;         /* texto secundário forte sobre claro */
+
+  /* Olivas intermediários — superfícies e bordas nas seções escuras */
+  --olive-500:#415243;
+  --olive-600:#516252;
+  --olive-700:#324134;
+  --olive-750:#40423E;
+  --olive-800:#31322D;
+  --olive-900:#253226;
+
+  /* Escuros profundos */
+  --deep-900:#162117;
+  --deep-950:#16261D;        /* rodape, um passo abaixo da dobra funda */
+
+  /* Musgo — o contraponto frio das dobras escuras. Já foi terra
+     (#81715F / #4F4230 / #3D3222), amostrado da referencia-page: puxava
+     para o avermelhado e saia da identidade. Virou verde no matiz 128 dos
+     outros escuros, COM A MESMA LUMINANCIA de cada tom -- por isso nenhum
+     contraste precisou ser remedido. */
+  --moss-400:#5B7B5F;
+  --moss-700:#2D4B31;
+  --moss-900:#203923;
+
+  /* Verde-sálvia pálido da referência */
+  --sage:#CBD8BE;
+
+  /* Degradê verde da página: #358D2F → #86D339.
+     As variantes existem porque nenhuma das duas pontas serve a todos
+     os fundos: cada uma cobre a faixa de contraste em que é legível.
+     A folha da logo usa #6A7356, entre as duas pontas.               */
+  --leaf:#358D2F;             /* início do degradê da página */
+  --leaf-bright:#86D339;      /* fim do degradê; acentos sobre fundo escuro */
+  --leaf-botao:#2B8729;     /* oliva do botao de revelacao; ver LEIA-ME */
+  --leaf-ink:#176724;         /* texto e numeração sobre fundo claro */
+  --leaf-olive:#114F1D;       /* fecho do degradê das seções escuras */
+
+  --white:#FFFFFF;            /* texto dos botões de ação */
+
+  --txt-on-dark:rgba(241,245,242,.78);
+  /* Nao e mais o --gray-400: com a dobra escura da referencia (mais clara
+     que a anterior) ele caia para 4,28:1. */
+  --txt-on-dark-soft:#AEB2AF;
+  --line-dark:rgba(241,245,242,.14);
+  --line-light:var(--line-2);
+
+  /* Degradê oficial (base da identidade) */
+  --grad:linear-gradient(135deg,var(--dobra-escura) 0%,#2E5236 100%);
+  --grad-soft:linear-gradient(160deg,var(--ink-600) 0%,var(--ink-800) 70%);
+  /* Degradê oficial com o verde da logo fechando a composição */
+  --grad-rich:linear-gradient(135deg,var(--ink-800) 0%,var(--ink-600) 58%,var(--leaf-olive) 100%);
+  /* Degradê oficial fechando no musgo */
+  --grad-moss:linear-gradient(135deg,var(--ink-800) 0%,var(--ink-600) 54%,var(--moss-900) 100%);
+  /* Degradê de ação — verde da logo, usado nos CTAs de WhatsApp */
+  --grad-leaf:linear-gradient(135deg,var(--leaf) 0%,var(--leaf-bright) 100%);
+  /* O mesmo degradê rebaixado para viver SOBRE superficie clara. O
+     --grad-leaf puro reprova ali: a ponta #86D339 da 1,23:1 contra o
+     vidro branco do card. Aqui as duas pontas ficam abaixo da luminancia
+     que fecha 3:1 (5,59:1 na escura, 3,15:1 na clara). Mesmo principio do
+     grad-wa, que ja escurece o glifo do WhatsApp pelo mesmo motivo. */
+  --grad-leaf-tinta:linear-gradient(135deg,#125A20 0%,#2F8429 100%);
+  --glow-leaf:radial-gradient(62% 72% at 12% 0%,rgba(134,211,57,.18) 0%,rgba(134,211,57,0) 68%);
+
+  /* O broto da tarja, reaproveitado como mascara: assim a pastilha do
+     .eyebrow herda a cor por background-color em vez de repetir o mesmo
+     SVG inline nos sete lugares onde ela aparece. */
+  --ico-broto:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M11.1 21.5v-5.9C7.2 15.3 4.2 12 4.2 8.1v-.9h.9c3.5 0 6.5 2.4 7.2 5.8.9-3.9 4.4-6.7 8.5-6.7h.9v.9c0 4.8-3.9 8.7-8.7 8.7h-.1v5.6h-1.8Z%27/%3E%3C/svg%3E");
+
+  --shell:1240px;
+  --r-sm:12px;
+  --r-md:18px;
+  --r-lg:26px;
+  --r-xl:34px;
+
+  --sec-y:clamp(72px,9vw,128px);
+  --ease:cubic-bezier(.22,.61,.36,1);
+
+  --shadow-sm:0 2px 10px rgba(22,33,23,.07);
+  --shadow-md:0 14px 40px -18px rgba(22,33,23,.30);
+  --shadow-lg:0 34px 80px -34px rgba(22,33,23,.48);
+}
+
+/* ---------- 2. Base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+
+html{
+  -webkit-text-size-adjust:100%;
+  scroll-behavior:smooth;
+  scroll-padding-top:94px;
+}
+
+body{
+  margin:0;
+  font-family:'Altone','Montserrat',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  font-size:clamp(15px,.4vw + 14px,17px);
+  line-height:1.65;
+  font-weight:400;
+  color:var(--ink-800);
+  background:var(--surface-2);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  /* clip, nao hidden: com overflow-x:hidden o CSS promove o overflow-y a
+     auto, o body vira scroll container e as animacoes de scroll-timeline
+     param de rodar. O clip recorta sem criar container. */
+  overflow-x:clip;
+}
+
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+ul,ol{margin:0;padding:0;list-style:none}
+p{margin:0}
+
+h1,h2,h3{
+  margin:0;
+  font-weight:400;
+  line-height:1.12;
+  letter-spacing:-.011em;
+  text-wrap:balance;
+}
+
+h1{font-size:clamp(2.1rem,4.4vw,3.6rem);line-height:1.06;letter-spacing:-.019em}
+h2{font-size:clamp(1.55rem,2.7vw,2.35rem);letter-spacing:-.015em}
+h3{font-size:clamp(1rem,1.1vw,1.12rem);letter-spacing:-.006em;line-height:1.34}
+
+::selection{background:var(--ink-600);color:var(--bone)}
+
+/* O verde fosco não contrasta nos dois fundos com um tom só:
+   escuro sobre superfície clara, clareado sobre superfície escura. */
+:focus-visible{
+  outline:2px solid var(--leaf-ink);
+  outline-offset:3px;
+  border-radius:4px;
+}
+.hero :focus-visible,
+.section-dark :focus-visible,
+.cta-final :focus-visible,
+.site-header :focus-visible,
+.site-footer :focus-visible,
+.audience-cta :focus-visible{
+  outline-color:var(--leaf-bright);
+}
+
+.shell{
+  width:100%;
+  max-width:var(--shell);
+  margin-inline:auto;
+  padding-inline:clamp(20px,5vw,40px);
+}
+
+.skip-link{
+  position:fixed;top:-100px;left:16px;z-index:200;
+  background:var(--ink-800);color:var(--bone);
+  padding:12px 18px;border-radius:0 0 var(--r-sm) var(--r-sm);
+  font-size:.85rem;font-weight:600;
+  transition:top .2s var(--ease);
+}
+.skip-link:focus{top:0}
+
+/* ---------- 3. Utilitários de texto ---------- */
+
+
+/* Colchetes nas pontas, simbolo no fim. Era um traco de 26px seguido de
+   caixa alta bem espacada -- combinacao generica o bastante para ler como
+   template, e a que mais sofria no mobile: o rotulo da hero tem 40
+   caracteres e quebrava em duas linhas. O tracking caiu de .17em para
+   .11em (e menos ainda abaixo de 520px) para caber numa linha so.
+   Os colchetes sao glifos em ::before/::after, nao borda: e o desenho da
+   referencia, em que eles ficam soltos e afastados do texto. */
+.eyebrow{
+  margin:0 0 18px;
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:clamp(.62rem,.75vw,.72rem);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.11em;
+  color:var(--txt-on-dark-soft);
+}
+.eyebrow::before,
+.eyebrow::after{
+  /* o colchete fica mais alto e mais leve que o rotulo, para ler como
+     moldura e nao como letra do texto */
+  font-size:1.5em;font-weight:400;line-height:0;
+  letter-spacing:0;
+  color:var(--leaf-bright);
+}
+.eyebrow::before{content:"["}
+.eyebrow::after{content:"]"}
+
+/* O simbolo do fim: o broto da tarja, por mascara, para herdar a cor. */
+.eyebrow-ico{
+  width:1.25em;height:1.25em;flex:none;
+  background:var(--leaf-bright);
+  -webkit-mask:var(--ico-broto) center/contain no-repeat;
+  mask:var(--ico-broto) center/contain no-repeat;
+}
+
+/* Sobre as dobras claras a tinta inverte -- colchetes e broto junto. */
+.eyebrow-dark{color:var(--ink-500)}
+.eyebrow-dark::before,
+.eyebrow-dark::after{color:var(--leaf-ink)}
+.eyebrow-dark .eyebrow-ico{background:var(--leaf-ink)}
+
+.section{padding-block:var(--sec-y);position:relative}
+.section-light{background:var(--surface-2)}
+/* A ultima dobra clara usa o verde suave: duas dobras claras seguidas,
+   separadas so pela secao verde, viravam um bloco so. */
+#como-comprar{background:var(--dobra-suave)}
+
+/* Dobra de respiro: verde claro chapado, no lugar de mais uma seção clara.
+   O ritmo claro -> verde -> escuro vem da referencia-02. O texto segue
+   escuro: sobre o mint ele fica em 9,2:1. */
+.section-mint{background:var(--mint)}
+.section-mint .eyebrow-dark{color:var(--leaf-olive)}
+.section-mint .section-lead,
+.section-mint p{color:var(--ink-600)}
+/* Sobre o verde, o que separa o card do fundo e a sombra: a diferenca de cor
+   entre os dois e de so 1,5:1, baixa demais para delimitar sozinha. */
+.section-mint .card-audience{
+  background:var(--surface);
+  border-color:rgba(245,241,235,.7);
+  box-shadow:0 10px 30px -18px rgba(20,32,26,.45);
+}
+
+
+/* Tarja entre a hero e a dobra 2: as duas são bege, e sem ela
+   viram um bloco só. Fecha a hero e dá ritmo claro → escuro → claro. */
+.strip{
+  position:relative;
+  overflow:hidden;
+  background-color:var(--dobra-escura);
+  background-image:var(--grad);
+  color:var(--bone);
+  padding-block:clamp(26px,3.2vw,40px);
+}
+/* O conteudo fica entre o fundo e o reflexo. */
+.strip-inner{position:relative;z-index:1}
+/* Reflexo: uma crista de luz que atravessa a tarja conforme ela cruza a tela.
+
+   O brilho mora nas ARESTAS, onde nao ha texto -- e o que permite que ele seja
+   forte. Os halos radiais sobem/descem no maximo 32% da altura (~37px) e o
+   conteudo comeca a 40px de cada borda, entao a luz chega perto mas nao
+   encosta. No corpo, onde o texto esta, a lamina fica em .14: e o teto que
+   mantem o texto em 4,6:1. Tudo o que e brilho visivel aqui esta fora da
+   faixa de leitura, de proposito.
+
+   A lamina do corpo fica em .12 e nao mais: a .14 o icone da tarja cai para
+   3,02:1 -- passa por 0,02, o que nao e margem. O que se ve como luz vem dos
+   halos, que sao largos e fortes porque estao fora do texto. */
+.strip::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    /* halo da aresta de cima: o que de fato se ve como luz */
+    radial-gradient(ellipse 42% 33% at 50% 0%,
+      rgba(246,254,229,.95) 0%,
+      rgba(172,239,70,.42) 40%,
+      rgba(172,239,70,.12) 68%,
+      transparent 100%),
+    /* halo da aresta de baixo, mais contido */
+    radial-gradient(ellipse 36% 27% at 50% 100%,
+      rgba(211,250,138,.72) 0%,
+      rgba(172,239,70,.26) 45%,
+      transparent 100%),
+    /* fio nitido sobre o halo de cima: da a borda dura da luz */
+    linear-gradient(90deg,
+      transparent 30%, rgba(223,252,171,.55) 42%,
+      #F7FEEA 50%,
+      rgba(223,252,171,.55) 58%, transparent 70%) no-repeat 0 0 / 100% 3px,
+    /* fio de baixo */
+    linear-gradient(90deg,
+      transparent 33%, rgba(172,239,70,.4) 44%,
+      rgba(223,252,171,.85) 50%,
+      rgba(172,239,70,.4) 56%, transparent 67%) no-repeat 0 100% / 100% 2px,
+    /* lamina inclinada no corpo: unica parte que cruza o texto */
+    linear-gradient(100deg,
+      transparent 36%, rgba(255,255,255,.06) 44%,
+      rgba(172,239,70,.12) 50%,
+      rgba(255,255,255,.06) 56%, transparent 64%);
+  translate:calc(var(--p) * 230% - 115%) 0;
+}
+@media (prefers-reduced-motion:reduce){
+  .strip::after{display:none}
+}
+
+.strip-inner{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(18px,2.4vw,34px);
+}
+.strip-item{
+  display:flex;align-items:center;
+  gap:12px;
+  padding-left:clamp(14px,1.8vw,24px);
+  border-left:1px solid var(--olive-600);
+}
+.strip-item:first-child{border-left:0;padding-left:0}
+.strip-item svg{
+  flex:0 0 auto;
+  width:26px;height:26px;
+  color:var(--leaf-bright);
+}
+.strip-item p{
+  margin:0;
+  font-size:.82rem;
+  font-weight:500;
+  line-height:1.42;
+  letter-spacing:.012em;
+  color:var(--bone);
+}
+.section-dark{
+  background-color:var(--dobra-escura);
+  background-image:var(--glow-leaf),var(--grad-rich);
+  color:var(--bone);
+}
+.section-dark h2,.section-dark h3{color:var(--bone)}
+
+.section-head{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:clamp(24px,4vw,64px);
+  align-items:end;
+  margin-bottom:clamp(36px,4.5vw,60px);
+}
+.section-lead{
+  color:var(--gray-700);
+  font-weight:500;
+  font-size:clamp(.95rem,1.05vw,1.06rem);
+  max-width:48ch;
+}
+.section-dark .section-lead{color:var(--txt-on-dark)}
+
+/* ---------- 4. Botões ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:11px;
+  padding:16px 26px;
+  border-radius:999px;
+  font-size:.86rem;
+  font-weight:700;
+  letter-spacing:.004em;
+  line-height:1.1;
+  border:1px solid transparent;
+  cursor:pointer;
+  text-align:center;
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),
+             background-color .25s var(--ease),color .25s var(--ease),
+             border-color .25s var(--ease);
+  will-change:transform;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+
+/* CTA principal de WhatsApp — degradê do verde da logo */
+.btn-leaf{
+  background:var(--leaf);
+  background-image:var(--grad-leaf);
+  color:#fff;
+  box-shadow:var(--shadow-md);
+}
+.btn-leaf:hover{
+  background-image:linear-gradient(135deg,#828B68 0%,#B6D76D 100%);
+  box-shadow:var(--shadow-lg);
+}
+
+/* Botão secundário — vive sobre a hero clara */
+.btn-ghost{
+  background:var(--surface);
+  color:var(--ink-800);
+  border-color:var(--line-2);
+}
+.btn-ghost:hover{border-color:var(--gray-500);background:var(--white)}
+
+.btn-sm{padding:12px 20px;font-size:.75rem;gap:8px}
+.btn-lg{padding:19px 34px;font-size:.92rem}
+.btn-block{display:flex;width:100%}
+
+.ico-wa{width:19px;height:19px;flex:none;fill:currentColor}
+.btn-lg .ico-wa{width:22px;height:22px}
+/* No botao verde o glifo vira badge: circulo branco com o degrade dentro.
+   Sobre o proprio verde do botao um glifo verde sumiria. */
+.btn-leaf .ico-wa{
+  width:24px;height:24px;
+  padding:3.5px;
+  box-sizing:border-box;
+  background:#fff;
+  border-radius:50%;
+  fill:url(#grad-wa);
+}
+.btn-leaf.btn-lg .ico-wa{width:28px;height:28px;padding:4px}
+.ico-arrow{width:18px;height:18px;flex:none;transition:transform .25s var(--ease)}
+.btn:hover .ico-arrow,a:hover>.ico-arrow{transform:translateX(4px)}
+
+/* ---------- 5. Header ---------- */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  transition:background-color .35s var(--ease),box-shadow .35s var(--ease),
+             backdrop-filter .35s var(--ease),border-color .35s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.site-header{
+  background:rgba(28,48,37,.82);
+  backdrop-filter:blur(14px) saturate(120%);
+}
+.site-header.is-stuck{
+  background:rgba(28,48,37,.95);
+  border-bottom-color:var(--line-2);
+  box-shadow:0 10px 30px -26px rgba(22,33,23,.9);
+}
+
+.header-inner{
+  display:flex;align-items:center;gap:clamp(16px,3vw,40px);
+  padding-block:16px;
+}
+
+.brand{flex:none;display:block}
+.brand img{
+  height:34px;width:auto;
+  transition:height .35s var(--ease);
+}
+.site-header.is-stuck .brand img{height:30px}
+
+/* A navegacao vive numa pastilha propria: o header e escuro sobre a hero
+   escura, entao sem um recorte proprio os links se diluem no fundo. O blur
+   fica no header -- repetir backdrop-filter aqui borraria o que ja esta
+   borrado, de graca. */
+.nav{
+  display:flex;align-items:center;gap:2px;
+  margin-left:auto;
+  padding:5px;
+  background:rgba(241,245,242,.07);
+  border:1px solid rgba(241,245,242,.13);
+  border-radius:999px;
+}
+.nav a{
+  font-size:.78rem;font-weight:600;
+  letter-spacing:.005em;
+  /* O header agora vive sobre a hero escura. */
+  color:var(--txt-on-dark);
+  padding:8px clamp(10px,1.2vw,15px);
+  border-radius:999px;
+  white-space:nowrap;
+  transition:color .22s var(--ease),background-color .22s var(--ease);
+}
+.nav a:hover{color:var(--bone);background:rgba(241,245,242,.11)}
+
+/* Secao visivel: verde da marca chapado. Texto --ink-800 em cima fecha
+   8,26:1 -- o unico par que passa AA com folga sobre o --leaf-bright. */
+.nav a.is-active{
+  color:var(--ink-800);
+  background:var(--leaf-bright);
+}
+.nav a.is-active:hover{color:var(--ink-800);background:var(--leaf-bright)}
+
+.header-cta{flex:none}
+
+.nav-toggle{
+  display:none;
+  margin-left:auto;
+  width:46px;height:46px;
+  border:1px solid var(--line-2);
+  background:var(--surface);
+  border-radius:50%;
+  padding:0;
+  cursor:pointer;
+  align-items:center;justify-content:center;
+  flex-direction:column;gap:5px;
+}
+.nav-toggle span{
+  /* O botao tem fundo claro proprio, mesmo com o header escuro. */
+  display:block;width:18px;height:1.6px;background:var(--ink-800);
+  border-radius:2px;
+  transition:transform .3s var(--ease),opacity .2s var(--ease);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6.6px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.6px) rotate(-45deg)}
+
+.mobile-menu{
+  display:none;
+  flex-direction:column;gap:4px;
+  padding:14px clamp(20px,5vw,40px) 26px;
+  background:var(--surface-2);
+  border-top:1px solid var(--line-2);
+}
+.mobile-menu a:not(.btn-reveal){
+  padding:14px 2px;
+  font-size:.86rem;font-weight:600;
+  letter-spacing:.005em;
+  color:var(--gray-700);
+  border-bottom:1px solid var(--line-2);
+}
+/* Aqui o fundo e claro: a pastilha verde da nav seria ilegivel. O destaque
+   vem da tinta --leaf-ink (6,77:1) com uma regua na lateral. */
+.mobile-menu a:not(.btn-reveal).is-active{
+  color:var(--leaf-ink);
+  box-shadow:inset 3px 0 0 var(--leaf);
+  padding-left:12px;
+}
+.mobile-menu .btn-reveal{margin-top:18px}
+
+/* ---------- 6. Hero ---------- */
+/* Hero escura, como na referencia-02: e a primeira faixa dela, nao uma
+   secao clara. Tudo o que vive aqui inverte para tinta clara. */
+.hero{
+  position:relative;
+  background:var(--dobra-funda);
+  color:var(--bone);
+  padding-top:clamp(118px,12vw,168px);
+  padding-bottom:clamp(54px,6.5vw,92px);
+  overflow:hidden;
+  /* Prende o z-index:-1 da camada de fundo dentro da dobra. */
+  isolation:isolate;
+}
+
+/* Fotografia de fundo da dobra, no mesmo padrao do .cta-media: a imagem fica
+   em z-index:-1, presa pelo isolation do .hero. O --dobra-funda continua
+   declarado acima -- e ele que pinta enquanto a foto carrega, e e sobre ele
+   que o contraste do scrim foi medido. */
+.hero-bg{position:absolute;inset:0;z-index:-1}
+.hero-bg img{width:100%;height:100%;object-fit:cover}
+
+/* Scrim ESCURO, nao o branco que foi abandonado antes (ver LEIA-ME): aqui
+   ele mantem a hero escura que ja existia e devolve o contraste que a foto
+   tiraria. E assimetrico de proposito -- forte a esquerda, onde mora o
+   texto, e fraco a direita, onde so ha o painel e o card, que tem fundo
+   proprio. E ali que a estufa aparece. */
+.hero-scrim{
+  position:absolute;inset:0;
+  background:linear-gradient(103deg,
+    rgba(28,48,37,.95) 0%,
+    rgba(28,48,37,.90) 32%,
+    rgba(28,48,37,.70) 62%,
+    rgba(28,48,37,.55) 100%);
+}
+/* O h1 traz <br> proprios: o balance brigaria com eles. */
+.hero h1{text-wrap:normal}
+/* Um passo mais claro que o --txt-on-dark-soft das outras dobras escuras:
+   aqui o fundo e a fotografia, e o canto superior esquerdo dela (o teto da
+   estufa) derrubava o rotulo para 4,57:1 -- passava no AA por 0,07. Com
+   este tom vai a 5,92:1 e continua cinza, sem virar titulo. */
+.hero .eyebrow-dark{color:#C6CAC7}
+.hero .eyebrow-dark::before,
+.hero .eyebrow-dark::after{color:var(--leaf-bright)}
+.hero .eyebrow-dark .eyebrow-ico{background:var(--leaf-bright)}
+.hero .hero-text{color:var(--txt-on-dark)}
+.hero .hero-tags{color:var(--txt-on-dark);border-top-color:var(--line-dark)}
+.hero .hero-tags li::before{background:var(--leaf-bright)}
+/* O fantasma deixa de ser branco: sobre fundo escuro ele vira contorno. */
+.hero .btn-ghost{
+  background:transparent;
+  color:var(--bone);
+  border-color:rgba(241,245,242,.3);
+}
+.hero .btn-ghost:hover{
+  background:rgba(241,245,242,.08);
+  border-color:rgba(241,245,242,.55);
+}
+
+
+/* Painel da fotografia, à direita do texto */
+.hero-visual{position:relative}
+.hero-media{
+  position:relative;
+  border-radius:var(--r-xl);
+  overflow:hidden;
+  background:var(--olive-900);
+  box-shadow:var(--shadow-lg);
+}
+.hero-media img{
+  width:100%;
+  height:clamp(430px,54vw,640px);
+  object-fit:cover;
+  animation:heroZoom 16s var(--ease) forwards;
+}
+@keyframes heroZoom{from{transform:scale(1.07)}to{transform:scale(1)}}
+
+/* Véu claro: o mesmo princípio do escuro, invertido.
+   A base termina exatamente em --surface-2, para emendar sem costura
+   com a dobra 2, que é clara. */
+.hero-inner{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,.84fr);
+  gap:clamp(30px,4.5vw,68px);
+  align-items:center;
+  width:100%;
+}
+.hero-content{max-width:40rem}
+.hero h1 em{font-style:normal;color:var(--leaf-bright)}
+
+.hero-text{
+  margin:clamp(20px,2.4vw,30px) 0 0;
+  max-width:48ch;
+  font-weight:500;
+  color:var(--gray-700);
+  font-size:clamp(.98rem,1.1vw,1.1rem);
+}
+
+.hero-actions{
+  display:flex;flex-wrap:wrap;gap:12px;
+  margin-top:clamp(26px,3vw,38px);
+}
+
+.hero-tags{
+  display:flex;flex-wrap:wrap;gap:10px 26px;
+  margin-top:clamp(24px,2.6vw,32px);
+  padding-top:22px;
+  border-top:1px solid var(--line-2);
+  font-size:.76rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;
+  color:var(--gray-700);
+}
+.hero-tags li{display:flex;align-items:center;gap:9px}
+.hero-tags li::before{
+  content:"";width:6px;height:6px;border-radius:50%;
+  background:var(--leaf);flex:none;
+  box-shadow:0 0 0 3px rgba(53,141,47,.22);
+}
+
+/* Card flutuante sobre a fotografia */
+.hero-card{
+  position:absolute;
+  left:clamp(14px,1.5vw,20px);
+  right:clamp(14px,1.5vw,20px);
+  bottom:clamp(14px,1.5vw,20px);
+
+  /* Chapada opaca, exatamente --surface: o mesmo tom dos botoes da hero.
+     Era vidro (tint a 72% + blur + saturate), e ai os 28% de folhagem
+     escura atravessando puxavam o card para um bege mais escuro e mais
+     verde que o botao, embora a tinta base fosse a mesma. Igualar o tom
+     custa a transparencia -- nao da para ter os dois.
+     Os tokens abaixo sao o unico ponto de troca de cor, e valem
+     tambem no mobile. */
+  --card-fg:var(--ink-800);
+  --card-fg-soft:var(--ink-600);
+  --card-accent:var(--leaf-ink);
+  --card-rule:rgba(30,40,31,.16);
+
+  background-color:var(--surface);
+  border:1px solid var(--line-light);
+  border-radius:clamp(18px,2vw,30px);
+  padding:clamp(18px,1.8vw,24px);
+  /* Sem vidro, a sombra e que descola o card da fotografia. */
+  box-shadow:0 18px 44px rgba(11,19,12,.28);
+  color:var(--card-fg);
+}
+.hero-card-label{
+  font-size:.68rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.17em;
+  color:var(--card-fg-soft);
+}
+.hero-card-num{
+  margin-top:10px;
+  font-size:clamp(1.6rem,2.1vw,2rem);
+  font-weight:600;text-transform:uppercase;line-height:1.05;
+  letter-spacing:.02em;
+}
+/* O "+25" leva o degrade da marca, rebaixado para o fundo claro.
+   A cor solida fica como base: sem background-clip:text o texto
+   transparente sumiria. */
+.hero-card-num strong{font-weight:700;color:var(--card-fg)}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  .hero-card-num strong{
+    background:var(--grad-leaf-tinta);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+}
+.hero-card-desc{
+  margin-top:8px;
+  font-size:.86rem;line-height:1.5;
+  color:var(--card-fg-soft);
+}
+.hero-card-list{
+  margin-top:16px;padding-top:14px;
+  border-top:1px solid var(--card-rule);
+  display:grid;gap:8px;
+  font-size:.8rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.hero-card-list li{display:flex;align-items:center;gap:10px}
+.hero-card-list li::before{
+  content:"";width:5px;height:5px;border-radius:50%;
+  background:var(--grad-leaf-tinta);flex:none;
+}
+.hero-card-link{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:16px;
+  font-size:.74rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.1em;
+  /* Tinta, nao o verde: mesmo criterio do "+25". */
+  color:var(--card-fg);
+  border-bottom:1px solid var(--card-rule);
+  padding-bottom:5px;
+  transition:border-color .25s var(--ease)
+}
+.hero-card-link:hover{border-bottom-color:var(--card-accent)}
+
+/* ---------- 7. Variedades ---------- */
+.grid-varieties{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(14px,1.6vw,22px);
+}
+.card-variety{
+  position:relative;
+  background:var(--surface-variety);
+  border:1px solid var(--line-light);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .4s var(--ease),box-shadow .4s var(--ease),border-color .4s var(--ease);
+}
+.card-variety:hover{
+  transform:translateY(-6px);
+  box-shadow:var(--shadow-lg);
+  border-color:rgba(53,141,47,.55);
+}
+
+/* A muda vem em PNG recortado e o bloco atras dela e CSS, nao pixel. Assim
+   a cor sai da paleta, acompanha a largura do card no mobile e a planta
+   pode ultrapassar o bloco -- que e o que da profundidade. */
+.card-variety-media{
+  position:relative;
+  aspect-ratio:4/4.8;
+  display:flex;align-items:flex-end;justify-content:center;
+  overflow:hidden;
+}
+/* o bloco: so a metade de baixo, com folga lateral, como um pedestal */
+.card-variety-media::before{
+  content:"";
+  position:absolute;left:7%;right:7%;bottom:0;
+  height:62%;
+  /* #EDF6EE dava 1,10 contra o branco do card: nao delimitava nada.
+     Este par fecha 1,44 no topo, a mesma ordem que separa os cards na
+     dobra verde. */
+  background:linear-gradient(180deg,#C8DCCB 0%,#DEEAE0 100%);
+  border-radius:var(--r-md) var(--r-md) 0 0;
+}
+.card-variety-media img{
+  position:relative;           /* acima do bloco */
+  /* O PNG tem ~66% de margem transparente nas laterais: travar a largura
+     em 86% do card encolhia a planta ate ela caber dentro do pedestal.
+     Sem max-width a altura manda, e a muda sobe para fora do bloco.
+     98% e o teto: a planta ocupa 86,8% do PNG, entao no hover (scale 1.05)
+     o topo dela para a 95% da media -- acima disso o overflow corta folha. */
+  width:auto;max-width:none;
+  height:98%;
+  object-fit:contain;
+  object-position:bottom;
+  transition:transform .7s var(--ease);
+  transform-origin:bottom center;
+}
+.card-variety:hover .card-variety-media img{transform:scale(1.05)}
+
+.card-variety-body{
+  padding:clamp(20px,2vw,28px);
+  display:flex;flex-direction:column;
+  flex:1;
+}
+.card-index{
+  font-size:.7rem;font-weight:700;
+  letter-spacing:.17em;
+  color:var(--leaf-ink);
+  display:block;margin-bottom:12px;
+}
+/* O nome da variedade e o produto: vai em bold, ao contrario dos demais
+   titulos da pagina, que sao 400. E o unico h3 que puxa o arquivo Bold
+   da Altone. */
+.card-variety-body h3{margin-bottom:10px;font-weight:700}
+.card-variety-body p{
+  color:var(--gray-700);
+  font-size:.92rem;
+  margin-bottom:20px;
+}
+.link-wa{
+  margin-top:auto;
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.74rem;font-weight:700;
+  letter-spacing:.008em;
+  color:var(--ink-800);
+  padding-top:16px;
+  border-top:1px solid var(--line-light);
+  transition:color .25s var(--ease);
+}
+.link-wa:hover{color:var(--leaf-ink)}
+
+.variety-note{
+  margin-top:clamp(20px,2.4vw,30px);
+  background:var(--sage);
+  border:1px solid rgba(45,75,49,.22);
+  border-radius:var(--r-lg);
+  padding:clamp(22px,2.6vw,34px);
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  gap:20px;
+}
+.variety-note p{
+  color:var(--moss-700);
+  font-size:clamp(.95rem,1.05vw,1.05rem);
+  max-width:52ch;
+}
+.variety-note strong{color:var(--moss-900);font-weight:700}
+
+/* ---------- 7b. Botão com revelação ---------- */
+/* No repouso: pastilha clara com a seta, à esquerda do rótulo.
+   No hover: a pastilha cresce até cobrir o botão inteiro e a seta caminha
+   para o centro -- o rótulo fica atrás dela.
+
+   O hover e todo em CSS. O JS so mede, uma vez e a cada resize, o quanto a
+   pastilha precisa crescer (--escala) e quanto a seta anda (--desloc); sem
+   isso a conta teria de ser refeita a cada frame de hover. */
+.btn-reveal{
+  --badge:46px;
+  --recuo:7px;
+  --escala:1;          /* o JS sobrescreve; 1 mantem o botao utilizavel sem JS */
+  --desloc:0px;
+  --tempo:.46s;
+  --curva:cubic-bezier(.44,0,.56,1);
+  /* Tematizaveis pelas variantes (.is-ghost, dobra escura) sem reescrever
+     as regras da pastilha e do glifo. */
+  --reveal-badge:var(--grad-leaf);
+  --reveal-glifo:var(--ink-800);
+
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  box-sizing:border-box;
+  min-height:calc(var(--badge) + 2 * var(--recuo));
+  padding-block:14px;
+  padding-inline:calc(var(--badge) + var(--recuo) + 16px) 30px;
+  border-radius:999px;
+  overflow:hidden;
+  background:var(--surface);
+  color:var(--ink-800);
+  font-size:.86rem; font-weight:700;
+  letter-spacing:.004em; line-height:1.15;
+  cursor:pointer; text-decoration:none; white-space:nowrap;
+  user-select:none;
+  box-shadow:var(--shadow-md);
+}
+/* A pastilha cobre o rotulo quando cresce, entao vem depois dele na pilha. */
+.btn-reveal-txt{position:relative;z-index:1;transition:translate var(--tempo) var(--curva)}
+.btn-reveal-badge{
+  position:absolute;z-index:2;
+  left:var(--recuo); top:50%;
+  width:var(--badge); height:var(--badge);
+  margin-top:calc(var(--badge) / -2);
+  border-radius:50%;
+  /* O degrade da marca. Ele nao muda de cor no hover: so cresce. Antes a
+     pastilha era clara e precisava escurecer enquanto crescia, senao
+     apagava o botao; com o botao branco e a pastilha verde desde o
+     repouso, a inversao acontece sozinha. */
+  background:var(--reveal-badge);
+  transition:scale var(--tempo) var(--curva);
+}
+.btn-reveal-glifo{
+  position:absolute;z-index:3;
+  left:calc(var(--recuo) + var(--badge) / 2); top:50%;
+  width:20px;height:20px;margin:-10px 0 0 -10px;
+  /* Tinta, nao branco: sobre o degrade o branco cai a 1,84:1 na ponta
+     clara, enquanto a tinta fecha 3,6:1 na escura e 8,3:1 na clara. */
+  color:var(--reveal-glifo);
+  transition:translate var(--tempo) var(--curva);
+}
+.btn-reveal-glifo svg{width:100%;height:100%;display:block}
+/* O glifo do WhatsApp entra sem a pastilha branca do .btn-leaf: aqui ele ja
+   esta dentro de uma pastilha. */
+.btn-reveal-glifo .ico-wa{
+  width:100%;height:100%;padding:0;
+  background:none;border-radius:0;
+  fill:currentColor;
+}
+
+.btn-reveal:hover .btn-reveal-badge,
+.btn-reveal:focus-visible .btn-reveal-badge{scale:var(--escala)}
+.btn-reveal:hover .btn-reveal-glifo,
+.btn-reveal:focus-visible .btn-reveal-glifo{translate:var(--desloc) 0}
+.btn-reveal:hover .btn-reveal-txt,
+.btn-reveal:focus-visible .btn-reveal-txt{translate:8px 0}
+
+.btn-reveal:active{scale:.985}
+
+/* Variantes -- mesmas medidas que os antigos .btn-sm / .btn-lg / .btn-block,
+   para que o efeito da hero valha em toda a pagina sem mudar o ritmo visual
+   de cada dobra. O glifo acompanha o tamanho da pastilha. */
+.btn-reveal.is-sm{
+  --badge:34px;--recuo:6px;
+  padding-block:10px;
+  padding-inline:calc(var(--badge) + var(--recuo) + 12px) 20px;
+  font-size:.75rem;
+}
+.btn-reveal.is-sm .btn-reveal-glifo{width:16px;height:16px;margin:-8px 0 0 -8px}
+.btn-reveal.is-lg{
+  --badge:54px;--recuo:8px;
+  padding-block:17px;
+  padding-inline:calc(var(--badge) + var(--recuo) + 18px) 36px;
+  font-size:.92rem;
+}
+.btn-reveal.is-lg .btn-reveal-glifo{width:25px;height:25px;margin:-12.5px 0 0 -12.5px}
+.btn-reveal.is-block{display:flex;width:100%}
+
+/* Secundario: o movimento e o mesmo, so a cor recua -- contorno em vez de
+   fundo, e pastilha de tinta em vez do degrade da marca. */
+.btn-reveal.is-ghost{
+  --reveal-badge:var(--ink-800);
+  --reveal-glifo:var(--surface);
+  background:transparent;
+  border:1px solid var(--line-2);
+  box-shadow:none;
+}
+.hero .btn-reveal.is-ghost{
+  --reveal-badge:var(--bone);
+  --reveal-glifo:var(--ink-800);
+  color:var(--bone);
+  border-color:rgba(241,245,242,.3);
+}
+
+@media (max-width:520px){
+  /* No telefone o botao e um objeto, nao uma barra: a pastilha encolhe, a
+     altura cai junto (--badge + 2 * --recuo e quem manda na altura minima)
+     e o recuo da esquerda cola no texto -- 10px entre a pastilha e a
+     primeira letra, em vez dos 12px da medida de desktop. */
+  .btn-reveal{
+    --badge:30px;
+    --recuo:5px;
+    font-size:.78rem;
+    letter-spacing:.004em;
+    padding-block:9px;
+    padding-inline:calc(var(--badge) + var(--recuo) + 10px) 18px;
+  }
+  .btn-reveal .btn-reveal-glifo{width:16px;height:16px;margin:-8px 0 0 -8px}
+  .btn-reveal.is-lg{
+    --badge:34px;
+    font-size:.82rem;
+    padding-block:10px;
+    padding-inline:calc(var(--badge) + var(--recuo) + 10px) 18px;
+  }
+  .btn-reveal.is-lg .btn-reveal-glifo{width:18px;height:18px;margin:-9px 0 0 -9px}
+  /* O nowrap do bloco base e um corte silencioso: com overflow:hidden, um
+     rotulo longo nao empurra o botao -- some pela borda direita sem aviso.
+     No telefone ele quebra em duas linhas e o botao cresce junto. */
+  .btn-reveal{white-space:normal}
+  .btn-reveal-txt{display:block}
+}
+
+/* Sem movimento: a pastilha nao cresce e o rotulo nao sai do lugar. */
+@media (prefers-reduced-motion:reduce){
+  .btn-reveal-badge,.btn-reveal-glifo,.btn-reveal-txt{transition:none}
+  .btn-reveal:hover .btn-reveal-badge,
+  .btn-reveal:focus-visible .btn-reveal-badge{scale:1}
+  .btn-reveal:hover .btn-reveal-glifo,
+  .btn-reveal:focus-visible .btn-reveal-glifo{translate:0}
+  .btn-reveal:hover .btn-reveal-txt,
+  .btn-reveal:focus-visible .btn-reveal-txt{translate:0}
+}
+
+/* ---------- 8. Experiência e produção (split) ---------- */
+.split{
+  display:grid;
+  grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
+  gap:clamp(30px,5vw,76px);
+  align-items:center;
+}
+.split-media{
+  position:relative;
+  border-radius:var(--r-xl);
+  overflow:hidden;
+  box-shadow:var(--shadow-lg);
+}
+.split-media img{
+  width:100%;aspect-ratio:4/3;object-fit:cover;
+}
+/* Selo claro: o vidro escuro de antes competia com a foto. Com bege a
+   92% o blur ainda mostra a folhagem, e o conteudo inverte para tinta --
+   as tres cores mudam juntas, senao o verde claro do "+25" sumiria. */
+.split-badge{
+  position:absolute;left:22px;bottom:22px;
+  background:rgba(245,241,235,.92);
+  -webkit-backdrop-filter:blur(12px) saturate(140%);
+  backdrop-filter:blur(12px) saturate(140%);
+  border:1px solid rgba(245,241,235,.75);
+  box-shadow:0 10px 30px -14px rgba(11,19,12,.45);
+  border-radius:var(--r-md);
+  padding:16px 22px;
+  display:flex;flex-direction:column;
+  line-height:1.1;
+}
+.split-badge strong{
+  font-size:1.45rem;font-weight:700;color:var(--leaf-ink);letter-spacing:.015em;
+}
+.split-badge span{
+  font-size:.68rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.14em;
+  color:var(--gray-700);
+  margin-top:5px;
+}
+
+.split-text{
+  margin-top:clamp(18px,2vw,26px);
+  font-weight:500;
+  color:var(--txt-on-dark);
+  max-width:56ch;
+}
+
+.feature-list{
+  margin-top:clamp(28px,3vw,40px);
+  display:grid;gap:2px;
+}
+.feature-list li{
+  display:flex;gap:18px;align-items:flex-start;
+  padding:22px 0;
+  border-top:1px solid var(--olive-600);
+}
+.feature-list li:last-child{border-bottom:1px solid var(--olive-600)}
+.ico-feat{
+  width:26px;height:26px;flex:none;
+  color:var(--leaf-bright);opacity:.9;
+  margin-top:1px;
+}
+.feature-list h3{margin-bottom:6px}
+.feature-list p{
+  color:var(--txt-on-dark);
+  font-size:.92rem;
+}
+
+/* ---------- 9. Público atendido ---------- */
+.grid-audience{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(12px,1.4vw,18px);
+}
+.card-audience{
+  background:var(--surface-3);
+  border:1px solid var(--line-light);
+  border-radius:var(--r-md);
+  padding:clamp(22px,2.2vw,30px);
+  min-height:168px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),background-color .35s var(--ease);
+}
+.card-audience:hover{
+  transform:translateY(-5px);
+  box-shadow:var(--shadow-md);
+}
+.card-audience .card-index{margin-bottom:0;color:var(--gray-700)}
+.card-audience h3{
+  font-size:clamp(.95rem,1.1vw,1.08rem);
+  text-wrap:balance;
+}
+
+.audience-cta{
+  margin-top:clamp(20px,2.4vw,30px);
+  border-radius:var(--r-lg);
+  background-color:var(--dobra-funda);
+  background-image:var(--glow-leaf),var(--grad);   /* degradê oficial puro */
+  color:var(--bone);
+  padding:clamp(26px,3vw,40px);
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  gap:22px;
+  box-shadow:var(--shadow-md);
+}
+.audience-cta p{
+  max-width:46ch;
+  color:var(--txt-on-dark);
+  font-size:clamp(.95rem,1.05vw,1.08rem);
+}
+.audience-cta strong{color:var(--bone);font-weight:700}
+
+/* ---------- 10. Procedência e documentação ---------- */
+/* Procedência: mesma base oliva, fechando no musgo */
+.section-doc{
+  overflow:hidden;
+  background-color:var(--dobra-funda);
+  background-image:
+    radial-gradient(58% 70% at 88% 8%,rgba(91,123,95,.22) 0%,rgba(91,123,95,0) 70%),
+    var(--grad-moss);
+}
+.doc-grid{
+  display:grid;
+  /* 1fr/1fr: o texto e denso e os cards sao esparsos. Com .9/1.1 a
+     coluna de texto ficava em 494px (50 caracteres por linha, quebras
+     ruins) e os cards sobravam largura. */
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(30px,4.5vw,70px);
+  align-items:start;
+}
+/* Sem sticky: as duas colunas tem altura parecida, entao ele so pegava
+   por ~66px de rolagem -- desalinhava os topos sem nenhum ganho. */
+.doc-intro .split-text{max-width:60ch}
+.doc-cards{display:grid;gap:clamp(12px,1.4vw,16px)}
+.card-doc{
+  background:var(--olive-700);
+  border:1px solid var(--olive-600);
+  border-radius:var(--r-md);
+  padding:clamp(22px,2.2vw,28px);
+  display:grid;
+  grid-template-columns:auto 1fr;
+  grid-template-rows:auto auto;
+  column-gap:18px;row-gap:6px;
+  transition:background-color .3s var(--ease),border-color .3s var(--ease),transform .3s var(--ease);
+}
+.card-doc:hover{
+  background:var(--olive-500);
+  border-color:rgba(134,211,57,.52);
+  transform:translateX(5px);
+}
+.card-doc .ico-feat{grid-row:1/3;color:var(--leaf-bright)}
+.card-doc p{
+  color:var(--txt-on-dark);font-size:.92rem;
+  /* Sem isto a segunda linha vinha orfa: "operacao." sozinha. */
+  text-wrap:balance;
+}
+
+.doc-footnote{
+  margin-top:clamp(28px,3vw,40px);
+  padding-top:24px;
+  border-top:1px solid var(--moss-400);
+  color:var(--txt-on-dark-soft);
+  font-size:.9rem;
+  /* A regua atravessa a shell inteira; quem segura a medida do texto e
+     o padding, nao um max-width -- com ele a regua ficava orfa em 667px. */
+  max-width:none;
+  text-wrap:pretty;
+}
+/* So acima de 980px, onde o grid e de duas colunas, sobra largura para
+   recuar o texto. Empilhado isso espremia a nota em ~220px no celular. */
+@media (min-width:981px){
+  .doc-footnote{padding-right:clamp(0px,34%,460px)}
+}
+
+/* ---------- 11. Consulta e retirada ---------- */
+.steps-wrap{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:clamp(24px,3.4vw,52px);
+  align-items:start;
+}
+.steps{display:grid;gap:clamp(12px,1.4vw,16px)}
+.steps li{
+  position:relative;
+  background:var(--surface-card);
+  border:1px solid var(--line-card);
+  border-radius:var(--r-md);
+  padding:clamp(22px,2.2vw,30px) clamp(22px,2.2vw,30px) clamp(22px,2.2vw,30px) clamp(72px,7vw,86px);
+  transition:border-color .3s var(--ease),box-shadow .3s var(--ease);
+}
+.steps li:hover{border-color:rgba(53,141,47,.5);box-shadow:var(--shadow-sm)}
+.step-num{
+  position:absolute;
+  left:clamp(22px,2.2vw,30px);top:clamp(22px,2.2vw,30px);
+  width:34px;height:34px;border-radius:50%;
+  background:var(--grad-leaf);color:var(--ink-800);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;font-weight:700;
+  box-shadow:var(--shadow-sm);
+}
+.steps h3{margin-bottom:7px}
+.steps p{color:var(--gray-700);font-size:.92rem}
+
+.pickup-card{
+  background:var(--surface-card);
+  border:1px solid var(--line-card);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  box-shadow:var(--shadow-md);
+}
+.pickup-media{aspect-ratio:16/8.4;overflow:hidden;background:var(--olive-800)}
+.pickup-media img{width:100%;height:100%;object-fit:cover}
+.pickup-body{padding:clamp(22px,2.4vw,32px)}
+.pickup-body h3{margin-bottom:18px}
+.pickup-body ul{display:grid;gap:14px;margin-bottom:24px}
+.pickup-body li{
+  display:flex;gap:13px;align-items:flex-start;
+  font-size:.9rem;color:var(--gray-700);line-height:1.5;
+}
+.pickup-body strong{color:var(--ink-800);font-weight:600}
+.pickup-body .ico-feat{width:21px;height:21px;color:var(--leaf-bright);opacity:1;margin-top:2px}
+
+/* ---------- 12. CTA final ---------- */
+/* Fechamento sem nenhuma regua: a separacao vem do espaco e da hierarquia de
+   tamanho, nao de linha. Uma coluna centrada, com larguras de medida
+   controladas (titulo < texto) para o bloco ficar aprumado no eixo. */
+.cta-final{
+  position:relative;
+  color:var(--bone);
+  overflow:hidden;
+  isolation:isolate;
+  padding-block:clamp(84px,10vw,140px);
+}
+.cta-media{position:absolute;inset:0;z-index:-1}
+.cta-media img{width:100%;height:100%;object-fit:cover}
+.cta-scrim{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(60% 80% at 88% 20%,rgba(134,211,57,.26) 0%,rgba(134,211,57,0) 68%),
+    linear-gradient(135deg,rgba(30,40,31,.94) 0%,rgba(30,40,31,.76) 48%,rgba(21,93,34,.82) 100%);
+}
+.cta-inner{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;
+  gap:clamp(26px,3.4vw,42px);
+}
+.cta-titulo{display:flex;flex-direction:column;align-items:center;gap:14px}
+.cta-titulo .eyebrow{margin:0}
+.cta-titulo h2{margin:0;max-width:22ch}
+/* O titulo pode crescer porque nao divide a linha com o texto corrido. */
+.cta-final h2{
+  font-size:clamp(1.9rem,4vw,3.3rem);
+  line-height:1.04;
+  text-wrap:balance;
+}
+.cta-acao{
+  display:flex;flex-direction:column;align-items:center;
+  gap:clamp(24px,2.8vw,34px);
+  width:100%;
+}
+.cta-text{
+  margin:0;
+  max-width:54ch;
+  font-weight:500;
+  color:var(--txt-on-dark);
+  font-size:clamp(.96rem,1.05vw,1.05rem);
+  text-wrap:pretty;
+}
+/* O botao nao atravessa a dobra inteira: no centro, uma medida fechada
+   pesa mais do que uma barra de ponta a ponta. */
+/* Centrado como objeto, nao como barra: o botao se mede pelo proprio rotulo
+   (sem .is-block) e o align-items:center da coluna o poe no eixo do titulo.
+   Por dentro ele fica igual a todos os outros -- pastilha, vao, rotulo. */
+.cta-acao .btn-reveal{margin-top:0;max-width:min(100%,460px)}
+
+
+/* ---------- 13. Footer ---------- */
+.site-footer{
+  background-color:var(--deep-950);
+  background-image:var(--grad-soft);   /* degradê oficial, invertido */
+  color:var(--bone);
+  padding-top:clamp(50px,6vw,76px);
+}
+.footer-inner{
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr) minmax(0,1fr);
+  gap:clamp(28px,4vw,56px);
+  padding-bottom:clamp(36px,4vw,56px);
+}
+.footer-brand img{height:36px;width:auto;margin-bottom:18px}
+.footer-brand p{color:var(--txt-on-dark-soft);font-size:.88rem;line-height:1.6}
+
+.footer-nav{display:grid;gap:11px;align-content:start}
+.footer-nav a{
+  font-size:.78rem;font-weight:600;
+  letter-spacing:.005em;
+  color:var(--txt-on-dark);
+  transition:color .22s var(--ease);
+  width:fit-content;
+}
+.footer-nav a:hover{color:var(--bone)}
+
+.footer-label{
+  font-size:.68rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.16em;
+  color:var(--txt-on-dark-soft);
+  margin-bottom:12px;
+}
+.footer-phone{
+  display:inline-flex;align-items:center;gap:11px;
+  font-size:clamp(1.05rem,1.5vw,1.3rem);
+  font-weight:700;
+  color:var(--bone);
+  transition:opacity .22s var(--ease);
+}
+.footer-phone:hover{opacity:.8}
+.footer-phone .ico-wa{width:22px;height:22px;color:var(--leaf-bright)}
+.footer-note{
+  margin-top:14px;
+  font-size:.82rem;line-height:1.55;
+  color:var(--txt-on-dark-soft);
+  max-width:36ch;
+}
+
+.footer-bottom{
+  display:flex;flex-wrap:wrap;gap:10px 24px;
+  justify-content:space-between;
+  padding-top:22px;
+  /* folga para o botão flutuante do WhatsApp não cobrir esta linha */
+  padding-bottom:clamp(22px,8vw,76px);
+  border-top:1px solid var(--olive-500);
+  font-size:.76rem;
+  /* O --gray-500 dava 4,03:1 contra o rodape mais claro da referencia. */
+  color:#9BA09D;
+}
+
+/* ---------- 14. WhatsApp flutuante ---------- */
+.wa-float{
+  position:fixed;
+  right:clamp(16px,2.4vw,28px);
+  bottom:clamp(16px,2.4vw,28px);
+  z-index:95;
+  display:inline-flex;align-items:center;gap:11px;
+  padding:15px 22px;
+  border-radius:999px;
+  background:var(--leaf);
+  background-image:var(--grad-leaf);
+  color:var(--ink-800);
+  border:1px solid rgba(22,33,23,.16);
+  box-shadow:var(--shadow-lg);
+  font-size:.76rem;font-weight:700;
+  letter-spacing:.005em;
+  opacity:0;visibility:hidden;transform:translateY(14px);
+  transition:opacity .35s var(--ease),transform .35s var(--ease),visibility .35s;
+}
+.wa-float.is-visible{opacity:1;visibility:visible;transform:translateY(0)}
+.wa-float:hover{transform:translateY(-3px)}
+.wa-float svg{width:22px;height:22px;flex:none;fill:currentColor}
+
+/* ---------- 15. Animações de entrada ---------- */
+.reveal{
+  opacity:0;
+  transform:translateY(22px);
+  transition:opacity .75s var(--ease),transform .75s var(--ease);
+}
+.reveal.is-in{opacity:1;transform:none}
+.reveal[data-delay="1"]{transition-delay:.08s}
+.reveal[data-delay="2"]{transition-delay:.16s}
+.reveal[data-delay="3"]{transition-delay:.24s}
+.reveal[data-delay="4"]{transition-delay:.32s}
+
+/* ---------- 16. Folhas ao vento ---------- */
+/* Recortadas da foto, uma por arquivo, em assets/img/folhas/.
+   O percurso nao corre no tempo: corre na POSICAO do scroll. Quem escreve a
+   posicao e o main.js, numa unica custom property (--p, de 0 a 1); todo o
+   resto do movimento esta aqui. Rolar de volta diminui --p, entao o percurso
+   se desfaz sozinho.
+
+   Por que nao as scroll-driven animations nativas do CSS: elas seriam mais
+   baratas, mas rodam no compositor e nao consegui verifica-las no ambiente
+   de teste. Preferi o caminho que da para provar -- e que funciona tambem
+   no Firefox e no Safari antigo, onde as nativas ainda nao chegaram. */
+
+@property --p{ syntax:'<number>'; initial-value:0; inherits:true }
+/* inherits:true de proposito: o JS escreve --p so na camada, e folhas e
+   reflexo leem por heranca -- uma escrita por quadro em vez de uma por filho. */
+
+.vento{
+  position:absolute; inset:0;
+  overflow:clip;               /* a folha nunca empurra o scroll lateral */
+  pointer-events:none;
+  /* Na frente do conteudo (shell=1), atras do header (100) e do botao
+     flutuante (95): as folhas passam por cima de texto e foto, mas nunca
+     sobre navegacao ou CTA. */
+  z-index:50;
+}
+.section > .shell{position:relative;z-index:1}
+
+.folha{
+  position:absolute;
+  width:var(--tam);
+  height:auto;
+  /* Entra e sai por fade: a folha nunca e vista sendo cortada na borda.
+     O min() desenha um trapezio -- sobe ate 14%, segura, cai a partir de 86%. */
+  opacity:calc(var(--op) * min(1, min(var(--p) / .14, (1 - var(--p)) / .14)));
+  translate:calc(var(--x1) * var(--p)) calc(var(--y1) * var(--p));
+  rotate:calc(var(--r0) + (var(--r1) - var(--r0)) * var(--p));
+  scale:calc(var(--s0,1) + (var(--s1,1) - var(--s0,1)) * var(--p));
+}
+
+/* Seis perfis de voo. A profundidade vem do tamanho, do giro e de um desfoque
+   leve nas distantes -- quase nao vem mais da opacidade: as folhas sao solidas
+   de proposito. O custo esta medido no LEIA-ME. */
+.folha-1{                       /* perto, cruza a tela inteira */
+  --tam:clamp(68px,7vw,116px); --op:1;
+  top:8%; left:-12%;
+  --x1:118vw; --y1:14vh; --r0:-18deg; --r1:166deg; --s0:.94; --s1:1.06;
+}
+.folha-2{                       /* media, sobe enquanto atravessa */
+  --tam:clamp(52px,5.4vw,88px); --op:.9;
+  top:62%; left:-8%;
+  --x1:112vw; --y1:-20vh; --r0:12deg; --r1:-124deg;
+}
+.folha-3{                       /* longe: pequena, apagada, desfocada */
+  --tam:clamp(34px,3.6vw,58px); --op:.76;
+  top:28%; left:-6%;
+  filter:blur(.7px);
+  --x1:104vw; --y1:9vh; --r0:-6deg; --r1:78deg;
+}
+.folha-4{                       /* perto, entra alto e desce em diagonal */
+  --tam:clamp(60px,6.2vw,100px); --op:.96;
+  top:-8%; left:18%;
+  --x1:46vw; --y1:118vh; --r0:22deg; --r1:-188deg; --s0:1.04; --s1:.9;
+}
+.folha-5{                       /* media, vem da direita na contramao */
+  --tam:clamp(46px,4.8vw,78px); --op:.84;
+  top:74%; right:-8%;
+  --x1:-96vw; --y1:-16vh; --r0:-30deg; --r1:112deg;
+}
+.folha-6{                       /* longe, percurso curto */
+  --tam:clamp(30px,3.2vw,52px); --op:.7;
+  top:44%; left:36%;
+  filter:blur(1px);
+  --x1:34vw; --y1:26vh; --r0:8deg; --r1:-62deg;
+}
+
+/* Sem JS a folha fica parada e discreta, em vez de sumir. */
+.sem-js .folha{opacity:calc(var(--op) * .5)}
+
+/* Telas estreitas: menos folhas e percursos curtos, senao viram ruido
+   sobre um texto que ja ocupa a largura toda. */
+@media (max-width:760px){
+  .folha-3,.folha-6{display:none}
+  .folha{--op:.78}
+  .folha-1{--x1:108vw;--y1:10vh}
+  .folha-2{--x1:104vw;--y1:-12vh}
+  .folha-4{--x1:28vw;--y1:108vh}
+  .folha-5{--x1:-88vw;--y1:-10vh}
+}
+
+/* ---------- 17. Responsivo ---------- */
+@media (max-width:1080px){
+  .grid-audience{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .doc-intro{position:static}
+
+  /* A tarja em 4 colunas espreme o texto: passa a 2 por linha,
+     e a borda esquerda vira a do primeiro de cada linha. */
+  .strip-inner{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:clamp(16px,2.4vw,24px)}
+  .strip-item:nth-child(odd){border-left:0;padding-left:0}
+}
+
+/* Até 980px a hero empilha: texto e, abaixo, a foto panorâmica em faixa.
+   O card deixa de flutuar e passa a vir logo depois dela. */
+@media (max-width:980px){
+  .hero-inner{grid-template-columns:minmax(0,1fr)}
+  .hero-content{max-width:none}
+  .hero-media img{height:clamp(300px,52vw,420px)}
+  /* Fora da foto o card nao precisa se descolar de nada: a sombra funda do
+     bloco base vira a sombra curta. Cor e borda ja vem prontas de la. */
+  .hero-card{
+    position:static;
+    margin-top:14px;
+    box-shadow:var(--shadow-sm);
+  }
+}
+
+@media (max-width:980px){
+  html{scroll-padding-top:84px}
+  .nav,.header-cta{display:none}
+  .nav-toggle{display:flex}
+  .mobile-menu{display:none}
+  .site-header.is-open{background:var(--surface-2)}
+  .site-header.is-open .mobile-menu{display:flex}
+
+  /* Empilhado, o texto ocupa a largura toda: o degrade assimetrico deixaria
+     a ponta fraca por baixo dele. Aqui o veu e parelho. */
+  .hero-scrim{background:rgba(28,48,37,.93)}
+
+  .section-head{grid-template-columns:minmax(0,1fr);align-items:start;gap:16px}
+  .split{grid-template-columns:minmax(0,1fr)}
+  .split-media{order:-1}
+  .doc-grid{grid-template-columns:minmax(0,1fr)}
+  .steps-wrap{grid-template-columns:minmax(0,1fr)}
+
+
+
+  /* Variedades em duas colunas, card na vertical. O layout em linha que
+     havia aqui era da foto horizontal antiga: com a muda em pe a imagem
+     estica a altura do card e sobra um vazio grande ao lado do texto. */
+  .grid-varieties{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media (max-width:760px){
+  .strip-inner{grid-template-columns:minmax(0,1fr)}
+  .strip-item{border-left:0;padding-left:0}
+  /* uma coluna so: o card ja e vertical desde os 980px */
+  .grid-varieties{grid-template-columns:minmax(0,1fr)}
+  .hero{padding-top:104px}
+  .hero-actions .btn,.hero-actions .btn-reveal{width:100%}
+  .variety-note,.audience-cta{flex-direction:column;align-items:flex-start}
+  .variety-note .btn-reveal,.audience-cta .btn-reveal{width:100%}
+  .footer-inner{grid-template-columns:minmax(0,1fr);gap:34px}
+  .wa-float{padding:14px}
+  .wa-float-text{display:none}
+}
+
+
+@media (max-width:520px){
+  /* O rotulo da hero tem 40 caracteres: no telefone o tracking de .11em
+     sozinho ja estourava a largura da pastilha. */
+  .eyebrow{letter-spacing:.055em;gap:8px}
+}
+@media (max-width:460px){
+  .grid-audience{grid-template-columns:minmax(0,1fr)}
+  .card-audience{min-height:0;gap:14px}
+  .hero-tags{flex-direction:column;gap:10px}
+  .split-badge{left:14px;bottom:14px;padding:13px 18px}
+}
+
+/* A ultima dobra ja nasce empilhada e centrada; no telefone so o botao
+   passa a ocupar a largura toda. */
+@media (max-width:520px){
+  .cta-acao .btn-reveal{max-width:100%}
+}
+
+/* ---------- 18. Preferências do usuário ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+  .reveal{opacity:1;transform:none}
+  .hero-media img{animation:none}
+  /* Movimento preso ao scroll e gatilho classico de enjoo vestibular. */
+  .vento{display:none}
+}
+
+@media print{
+  .site-header,.wa-float,.hero-media,.cta-media{display:none !important}
+  body{background:#fff;color:#000}
+  .section-dark,.cta-final{background:#fff !important;color:#000 !important}
+}

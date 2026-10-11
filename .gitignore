@@ -1,0 +1,53 @@
+# Fotos e artes de origem (dezenas de MB). Ficam na sua maquina; o que o
+# site serve e o que esta em assets/img.
+/FINAL.jpg
+/HERO.jpg
+/FOTO 02.png
+/FOTO 03.PNG
+/BACKGROUND-HERO.png
+/logo viveiro.png
+/referencia-02.webp
+/referencia-page.jpg
+/fonte/
+
+# Briefing e copy: documentos internos do projeto.
+*.pdf
+
+# Ferramentas e rascunhos locais
+/server.ps1
+/_teste-tons.html
+/.claude/
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Imagens que nenhuma pagina referencia mais (4,0 MB). Continuam no disco,
+# so nao sobem: hospedar peso que ninguem baixa so encarece o clone.
+# Se alguma voltar a ser usada, e so tirar a linha correspondente.
+assets/img/cta-final.svg
+assets/img/estrutura-producao-900.jpg
+assets/img/estrutura-producao.jpg
+assets/img/estrutura-producao.svg
+assets/img/hero-estufa-mobile.jpg
+assets/img/hero-mudas-fileira.jpg
+assets/img/hero-viveiro-mobile.jpg
+assets/img/hero-viveiro-vertical.jpg
+assets/img/hero-viveiro.jpg
+assets/img/hero-viveiro.svg
+assets/img/logo-circular.png
+assets/img/logo-viveiro-escura.png
+assets/img/muda-card-560.png
+assets/img/muda-card.png
+assets/img/muda-citrica.png
+assets/img/retirada-viveiro-900.jpg
+assets/img/retirada-viveiro.jpg
+assets/img/retirada-viveiro.svg
+assets/img/variedade-laranja-pera.svg
+assets/img/variedade-limao-tahiti.svg
+assets/img/variedade-tangerina-ponkan.svg
+assets/img/MUDA PNG.png
+assets/img/MUDA-PNG.png
+assets/img/logo-viveiro.png
+assets/img/logo-circular-simbolo.png
